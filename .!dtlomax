@@ -1,0 +1,113 @@
+56
+..
+5 5 1
+fpfit
+180 5 3
+green3d
+355 5 4
+hypohet2
+5 35 5
+out
+180 35 6
+run
+355 35 7
+Smooth3d
+5 65 8
+Time3d
+180 65 9
+cat.cmd
+355 65 10
+Green3dFUNC.c
+180 95 11
+Grid2GMT.c
+355 95 12
+Grid2GMT.c%
+5 125 13
+Grid2GMT.mak
+180 125 14
+Grid2Stat.c
+355 125 15
+Grid2Stat.c%
+5 155 16
+Grid2Stat.mak
+180 155 17
+Grid2Time.mak
+355 155 18
+Grid2Time.mak%
+5 185 19
+Grid2Time1.c
+180 185 20
+Grid2Time1.c%
+355 185 21
+GridGraphLib.c
+5 215 22
+GridGraphLib.c%
+180 215 23
+GridGraphLib.h
+355 215 24
+GridGraphLib.h%
+5 245 25
+GridLib.c
+180 245 26
+GridLib.c%
+355 245 27
+GridLib.c.new
+5 275 28
+GridLib.h
+180 275 29
+GridLib.h%
+355 275 30
+GridLib.o
+5 305 31
+GridLoc.mak
+180 305 32
+GridLoc.mak%
+355 305 33
+GridLoc1.c
+5 335 34
+GridLoc1.c%
+180 335 35
+GridLoc1.c.new
+355 335 36
+GridLoc1.c.tmp
+5 365 37
+GridLoc1.o
+180 365 38
+GridProc.c
+355 365 39
+GridProc.mak
+5 395 40
+mak
+180 395 41
+Makefile
+355 395 42
+nrmatrix.o
+5 425 43
+nrutil.o
+180 425 44
+Pun2GMT.c
+355 425 45
+Pun2GMT.mak
+5 455 46
+ran1.o
+180 455 47
+sac.h
+355 455 48
+ScatSum.c
+5 485 49
+ScatSum.c%
+180 485 50
+ScatSum.mak
+355 485 51
+Time2EQ.mak
+5 515 52
+Time2EQ1.c
+180 515 53
+Time_3d_fs.c
+355 515 54
+Vel2Grid.mak
+5 545 55
+Vel2Grid1.c
+180 545 56
+ScatSum.o
+355 575 2

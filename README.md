@@ -1,13 +1,12 @@
-======================================================
 >>> Important note: Covariance errors (2014.10.30)
 ======================================================
 Applies to: LOCSEARCH MET and LOCSEARCH OCT
 The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc
 was subject to precision errors when the expectation of the scatter sample (e.g. the event location)
-was far from the origin of the NLL coordinates system relative to the extent of the PDF scatter sample. 
+was far from the origin of the NLL coordinates system relative to the extent of the PDF scatter sample.
 Several tests indicate that "Far from the origin" is of the order of 1000 times the extent of the PDF scatter sample.
 
-Errors in covariance will affect the ellipsoid and ellipse, standard-errors (erh, erz, etc.). 
+Errors in covariance will affect the ellipsoid and ellipse, standard-errors (erh, erz, etc.).
 
 For teleseismic locations (NLL GLOBAL mode) errors with the old algorithm occur primarily in
 longitude (X), increasing with expectation longitude and occasionally becoming large towards longitude +/-180deg.
@@ -17,12 +16,10 @@ using a regional, metric-based cartesian grid coordinate system with origin far 
 For local studies in rectangular coordinates where the NLL coordinates origin is within or near the network
 and target sources, the errors should be very small or negligible.
 
-The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc v.6.03.00 and later does not 
+The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc v.6.03.00 and later does not
 have these precision errors and is valid for locations far from the origin of the coordinate system.
-======================================================
 
 
-======================================================
 Complete NonLinLoc distribution software package
 ======================================================
 Unpack source files: unpack: NLL[VER]_src.tgz
@@ -35,10 +32,8 @@ OSX, Solaris:
 Linux:
 	make -R all
 See http://alomax.net/nlloc and http://alomax.net/nlloc -> tutorials for further information
-======================================================
 
 
-===========================================================================
 NLLoc_func_test program demonstrating running NLLoc through a function call
 ===========================================================================
 Unpack source files: unpack: NLL[VER]_src.tgz
@@ -64,10 +59,8 @@ To run:
 	rm -rf out/*
 	cd ..
 See nll_func/run_func.sh for more detail.
-===========================================================================
 
 
-===========================================================================
 ttime_func_test program demonstrating reading values from 2D or 3D grid file through a function call
 ===========================================================================
 Unpack source files: unpack: NLL[VER]_src.tgz
@@ -87,4 +80,3 @@ To run:
 	./run_func.sh
 	cd ..
 See ttime_func/run_func.sh for more detail.
-===========================================================================
