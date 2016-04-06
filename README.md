@@ -1,5 +1,5 @@
->>> Important note: Covariance errors (2014.10.30)
-======================================================
+Important note: Covariance errors (2014.10.30)
+------------------------------------------------------
 Applies to: LOCSEARCH MET and LOCSEARCH OCT
 The algorithm for calculating the covariance of the PDF scatter sample used in NLLoc
 was subject to precision errors when the expectation of the scatter sample (e.g. the event location)
@@ -21,7 +21,7 @@ have these precision errors and is valid for locations far from the origin of th
 
 
 Complete NonLinLoc distribution software package
-======================================================
+------------------------------------------------------
 Unpack source files: unpack: NLL[VER]_src.tgz
 Set bin path:
 export MYBIN=<path>/bin
@@ -35,7 +35,7 @@ See http://alomax.net/nlloc and http://alomax.net/nlloc -> tutorials for further
 
 
 NLLoc_func_test program demonstrating running NLLoc through a function call
-===========================================================================
+------------------------------------------------------
 Unpack source files: unpack: NLL[VER]_src.tgz
 Set bin path:
 	export MYBIN=<path>/bin
@@ -44,7 +44,7 @@ To build:
 In Makefile, uncomment the line:
 GNU_SOURCE=-D _GNU_SOURCE
 and comment the line:
-#GNU_SOURCE=
+GNU_SOURCE=
 To build:
 OSX, Solaris (not tested):
 	make NLLoc_func_test_
@@ -55,14 +55,14 @@ Unpack demo files: unpack: NLL[VER]_func.tgz
 To run:
 	cd nll_func
 	./run_func.sh
-# clean
+To clean
 	rm -rf out/*
 	cd ..
 See nll_func/run_func.sh for more detail.
 
 
 ttime_func_test program demonstrating reading values from 2D or 3D grid file through a function call
-===========================================================================
+------------------------------------------------------
 Unpack source files: unpack: NLL[VER]_src.tgz
 Set bin path:
 	export MYBIN=<path>/bin
