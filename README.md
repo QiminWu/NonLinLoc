@@ -22,61 +22,61 @@ have these precision errors and is valid for locations far from the origin of th
 
 Complete NonLinLoc distribution software package
 ------------------------------------------------------
-Unpack source files: unpack: NLL[VER]_src.tgz
-Set bin path:
-export MYBIN=<path>/bin
-To build:
-cd src
-OSX, Solaris:
-	make all
-Linux:
-	make -R all
-See http://alomax.net/nlloc and http://alomax.net/nlloc -> tutorials for further information
+	Unpack source files: unpack: NLL[VER]_src.tgz
+	Set bin path:
+	export MYBIN=<path>/bin
+	To build:
+	cd src
+	OSX, Solaris:
+		make all
+	Linux:
+		make -R all
+	See http://alomax.net/nlloc and http://alomax.net/nlloc -> tutorials for further information
 
 
 NLLoc_func_test program demonstrating running NLLoc through a function call
 ------------------------------------------------------
-Unpack source files: unpack: NLL[VER]_src.tgz
-Set bin path:
-	export MYBIN=<path>/bin
-To build:
-	cd src
-In Makefile, uncomment the line:
-GNU_SOURCE=-D _GNU_SOURCE
-and comment the line:
-GNU_SOURCE=
-To build:
-OSX, Solaris (not tested):
-	make NLLoc_func_test_
-Linux:
-	make -R NLLoc_func_test_
-	cd ..
-Unpack demo files: unpack: NLL[VER]_func.tgz
-To run:
-	cd nll_func
-	./run_func.sh
-To clean
-	rm -rf out/*
-	cd ..
-See nll_func/run_func.sh for more detail.
+	Unpack source files: unpack: NLL[VER]_src.tgz
+	Set bin path:
+		export MYBIN=<path>/bin
+	To build:
+		cd src
+	In Makefile, uncomment the line:
+	GNU_SOURCE=-D _GNU_SOURCE
+	and comment the line:
+	GNU_SOURCE=
+	To build:
+	OSX, Solaris (not tested):
+		make NLLoc_func_test_
+	Linux:
+		make -R NLLoc_func_test_
+		cd ..
+	Unpack demo files: unpack: NLL[VER]_func.tgz
+	To run:
+		cd nll_func
+		./run_func.sh
+	To clean
+		rm -rf out/*
+		cd ..
+	See nll_func/run_func.sh for more detail.
 
 
 ttime_func_test program demonstrating reading values from 2D or 3D grid file through a function call
 ------------------------------------------------------
-Unpack source files: unpack: NLL[VER]_src.tgz
-Set bin path:
-	export MYBIN=<path>/bin
-To build:
-cd src
-To build:
-OSX, Solaris (not tested):
-	make ttime_func_test
-Linux:
-	make -R ttime_func_test
-	cd ..
-Unpack demo files: unpack: NLL[VER]_func.tgz
-To run:
-	cd ttime_func
-	./run_func.sh
-	cd ..
-See ttime_func/run_func.sh for more detail.
+	Unpack source files: unpack: NLL[VER]_src.tgz
+	Set bin path:
+		export MYBIN=<path>/bin
+	To build:
+	cd src
+	To build:
+	OSX, Solaris (not tested):
+		make ttime_func_test
+	Linux:
+		make -R ttime_func_test
+		cd ..
+	Unpack demo files: unpack: NLL[VER]_func.tgz
+	To run:
+		cd ttime_func
+		./run_func.sh
+		cd ..
+	See ttime_func/run_func.sh for more detail.
