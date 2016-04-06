@@ -1,0 +1,308 @@
+# Makefile for NonLinLoc software package
+#
+# Invocation:
+#     Solaris: make all
+#     Linux:   make -R all
+
+
+#  IMPORTANT: change here to set the directory for binary executable files
+ifdef MYBIN
+BINDIR=${MYBIN}
+else
+# with the following, binary executables will be placed in bin subdirectory of your home directory
+#BINDIR=~/bin/
+# if in doubt, use the following - binary executables will be placed in the current directory
+BINDIR=.
+endif
+
+CC=gcc
+
+#
+GRID_FLOAT=
+# double precision grid files (not yet supported fully for NonLinLoc)
+GRID_FLOAT=-D GRID_FLOAT_TYPE_DOUBLE
+
+
+# Linux, Mac OS X ?
+CCFLAGS_BASIC =  -Wall  ${GRID_FLOAT}
+# Mac OS X ?
+#CCFLAGS_BASIC =  -Wall -D__APPLE__
+#
+# optimized
+#export CCFLAGS = -O3 $(CCFLAGS_BASIC)
+#
+# profile
+#export CCFLAGS= -pg $(CCFLAGS_BASIC)
+#
+# debug - gdb, valgrind, ...
+export CCFLAGS = $(CCFLAGS_BASIC) -g
+# valgrind --leak-check=yes  exe_name <args>
+# valgrind --leak-check=full --show-reachable=yes exe_name <args>
+
+
+
+all : HypDiff alberto2hyp ingv_list2hyp hypoinv2hyp hypoe2hyp fpfit2hyp diffTime Loc2ddct_ MergeFpfit GridXY2XYZ isc_isf2hyp hyp2bull_ GridProc
+
+GRID_LIB_OBJS=GridLib.o util.o geo.o octtree/octtree.o alomax_matrix/alomax_matrix.o alomax_matrix/alomax_matrix_svd.o matrix_statistics/matrix_statistics.o vector/vector.o ran1/ran1.o map_project.o
+
+# --------------------------------------------------------------------------
+# HypDiff
+#
+OBJS4 = HypDiff.o $(GRID_LIB_OBJS)
+HypDiff : $(BINDIR)/HypDiff
+$(BINDIR)/HypDiff : $(OBJS4)
+	${CC} $(OBJS4) $(CCFLAGS) -o $(BINDIR)/HypDiff -lm
+HypDiff.o : HypDiff.c GridLib.h
+	${CC} $(CCFLAGS) -c HypDiff.c
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# alberto2hyp
+#
+OBJS5 = alberto2hyp.o $(GRID_LIB_OBJS)
+alberto2hyp : $(BINDIR)/alberto2hyp
+$(BINDIR)/alberto2hyp : $(OBJS5)
+	${CC} $(OBJS5) $(CCFLAGS) -o $(BINDIR)/alberto2hyp -lm
+alberto2hyp.o : alberto2hyp.c GridLib.h
+	${CC} $(CCFLAGS) -c alberto2hyp.c
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# ingv_list2hyp
+#
+OBJS5 = ingv_list2hyp.o $(GRID_LIB_OBJS)
+ingv_list2hyp : $(BINDIR)/ingv_list2hyp
+$(BINDIR)/ingv_list2hyp : $(OBJS5)
+	${CC} $(OBJS5) $(CCFLAGS) -o $(BINDIR)/ingv_list2hyp -lm
+ingv_list2hyp.o : ingv_list2hyp.c GridLib.h
+	${CC} $(CCFLAGS) -c ingv_list2hyp.c
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# hypoinv2hyp
+#
+OBJS6 = hypoinv2hyp.o $(GRID_LIB_OBJS)
+hypoinv2hyp : $(BINDIR)/hypoinv2hyp
+$(BINDIR)/hypoinv2hyp : $(OBJS6)
+	${CC} $(OBJS6) $(CCFLAGS) -o $(BINDIR)/hypoinv2hyp -lm
+hypoinv2hyp.o : hypoinv2hyp.c GridLib.h
+	${CC} $(CCFLAGS) -c hypoinv2hyp.c
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# hypoe2hyp
+#
+OBJS7=hypoe2hyp.o $(GRID_LIB_OBJS)
+hypoe2hyp : ${BINDIR}/hypoe2hyp
+${BINDIR}/hypoe2hyp : ${OBJS7}
+	${CC} ${OBJS7} ${CCFLAGS} -o ${BINDIR}/hypoe2hyp -lm
+hypoe2hyp.o : hypoe2hyp.c GridLib.h
+	${CC} ${CCFLAGS} -c hypoe2hyp.c
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# fpfit2hyp
+#
+OBJS8=fpfit2hyp.o $(GRID_LIB_OBJS)
+fpfit2hyp : ${BINDIR}/fpfit2hyp
+${BINDIR}/fpfit2hyp : ${OBJS8}
+	${CC} ${OBJS8} ${CCFLAGS} -o ${BINDIR}/fpfit2hyp -lm
+fpfit2hyp.o : fpfit2hyp.c GridLib.h
+	${CC} ${CCFLAGS} -c fpfit2hyp.c
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# MergeFpfit
+#
+OBJS8B=MergeFpfit.o $(GRID_LIB_OBJS)
+MergeFpfit : ${BINDIR}/MergeFpfit
+${BINDIR}/MergeFpfit : ${OBJS8B}
+	${CC} ${OBJS8B} ${CCFLAGS} -o ${BINDIR}/MergeFpfit -lm
+MergeFpfit.o : MergeFpfit.c GridLib.h
+	${CC} ${CCFLAGS} -c MergeFpfit.c
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# diffTime
+#
+OBJS9 = diffTime.o $(GRID_LIB_OBJS)
+diffTime : $(BINDIR)/diffTime
+$(BINDIR)/diffTime : $(OBJS9)
+	${CC} $(OBJS9) $(CCFLAGS) -o $(BINDIR)/diffTime -lm
+diffTime.o : diffTime.c GridLib.h
+	${CC} $(CCFLAGS) -c diffTime.c
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# Loc2ddct
+#
+OBJS10 = Loc2ddct.o $(GRID_LIB_OBJS)
+Loc2ddct_ : $(BINDIR)/Loc2ddct
+$(BINDIR)/Loc2ddct : $(OBJS10)
+	${CC} $(OBJS10) $(CCFLAGS) -o $(BINDIR)/Loc2ddct -lm
+Loc2ddct.o : Loc2ddct.c GridLib.h
+	${CC} $(CCFLAGS) -c Loc2ddct.c
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# GridXY2XYZ
+#
+OBJS11 = GridXY2XYZ.o $(GRID_LIB_OBJS)
+GridXY2XYZ : $(BINDIR)/GridXY2XYZ
+$(BINDIR)/GridXY2XYZ : $(OBJS11)
+	${CC} $(OBJS11) $(CCFLAGS) -o $(BINDIR)/GridXY2XYZ -lm
+GridXY2XYZ.o : GridXY2XYZ.c GridLib.h
+	${CC} $(CCFLAGS) -c GridXY2XYZ.c
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# Loc2coul
+#
+OBJS12 = Loc2coul.o $(GRID_LIB_OBJS) ../okada/okada.o
+Loc2coul : $(BINDIR)/Loc2coul
+$(BINDIR)/Loc2coul : $(OBJS12)
+	${CC} $(OBJS12) $(CCFLAGS) -o $(BINDIR)/Loc2coul -lm
+Loc2coul.o : Loc2coul.c GridLib.h
+	${CC} $(CCFLAGS) -c Loc2coul.c
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# FindEquivPhases
+#
+OBJS13 = FindEquivPhases.o $(GRID_LIB_OBJS)
+FindEquivPhases : $(BINDIR)/FindEquivPhases
+$(BINDIR)/FindEquivPhases : $(OBJS13)
+	${CC} $(OBJS13) $(CCFLAGS) -o $(BINDIR)/FindEquivPhases -lm
+FindEquivPhases.o : FindEquivPhases.c GridLib.h
+	${CC} $(CCFLAGS) -c FindEquivPhases.c
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# Corr2MapGMT
+#
+OBJS14 = Corr2MapGMT.o $(GRID_LIB_OBJS)
+Corr2MapGMT : $(BINDIR)/Corr2MapGMT
+$(BINDIR)/Corr2MapGMT : $(OBJS14)
+	${CC} $(OBJS14) $(CCFLAGS) -o $(BINDIR)/Corr2MapGMT -lm
+Corr2MapGMT.o : Corr2MapGMT.c GridLib.h
+	${CC} $(CCFLAGS) -c Corr2MapGMT.c
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# DDcc2MapGMT
+#
+OBJS14 = DDcc2MapGMT.o
+DDcc2MapGMT : $(BINDIR)/DDcc2MapGMT
+$(BINDIR)/DDcc2MapGMT : $(OBJS14)
+	${CC} $(OBJS14) $(CCFLAGS) -o $(BINDIR)/DDcc2MapGMT -lm
+DDcc2MapGMT.o : DDcc2MapGMT.c
+	${CC} $(CCFLAGS) -c DDcc2MapGMT.c
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# isc_isf2hyp
+#
+OBJS15 = isc_isf2hyp.o $(GRID_LIB_OBJS)
+isc_isf2hyp : $(BINDIR)/isc_isf2hyp
+$(BINDIR)/isc_isf2hyp : $(OBJS15)
+	${CC} $(OBJS15) $(CCFLAGS) -o $(BINDIR)/isc_isf2hyp -lm
+isc_isf2hyp.o : isc_isf2hyp.c GridLib.h
+	${CC} $(CCFLAGS) -c isc_isf2hyp.c
+# --------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------
+# isc_isf2hyp
+#
+OBJS16 = nll2qml.o $(GRID_LIB_OBJS)
+nll2qml : $(BINDIR)/nll2qml
+$(BINDIR)/nll2qml : $(OBJS16)
+	${CC} $(OBJS16) $(CCFLAGS) -o $(BINDIR)/nll2qml -lm `xml2-config --cflags` `xml2-config --libs`
+nll2qml.o : nll2qml.c GridLib.h
+	${CC} $(CCFLAGS) -c nll2qml.c
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# hyp2bull
+#
+OBJS17 = hyp2bull.o $(GRID_LIB_OBJS)
+hyp2bull_ : $(BINDIR)/hyp2bull
+$(BINDIR)/hyp2bull : $(OBJS17)
+	${CC} $(OBJS17) $(CCFLAGS) -o $(BINDIR)/hyp2bull -lm
+hyp2bull.o : hyp2bull.c GridLib.h
+	${CC} $(CCFLAGS) -c hyp2bull.c
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# GridProc
+#
+OBJS18 = GridProc.o $(GRID_LIB_OBJS)
+GridProc : $(BINDIR)/GridProc
+$(BINDIR)/GridProc : $(OBJS18)
+	${CC} $(OBJS18) $(CCFLAGS) -o $(BINDIR)/GridProc -lm
+GridProc.o : GridProc.c GridLib.h
+	${CC} $(CCFLAGS) -c GridProc.c
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
+# geo_test
+#
+OBJS19 = geo_test.o geo.o
+geo_test_ : $(BINDIR)/geo_test
+$(BINDIR)/geo_test : $(OBJS19)
+	${CC} $(OBJS19) $(CCFLAGS) -o $(BINDIR)/geo_test -lm
+geo_test.o : geo_test.c geo.h
+	${CC} $(CCFLAGS) -c geo_test.c
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# General compile rule
+#
+
+%.o : %.c
+	$(CC) -c $(CCFLAGS)   $(OPTIONS) $< -o $@
+
+#
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# NLL special compile rule
+#
+
+NLLocLib.o : NLLocLib.c NLLocLib.h GridLib.h
+
+GridLib.o : GridLib.c GridLib.h  geometry/geometry.h util.h geo.h octtree/octtree.h alomax_matrix/alomax_matrix.h alomax_matrix/alomax_matrix_svd.h matrix_statistics/matrix_statistics.h ran1/ran1.h map_project.h
+
+GridMemLib.o : GridMemLib.c GridMemLib.h  GridLib.h
+
+GridGraphLib.o : GridGraphLib.c GridLib.h GridGraphLib.h
+
+phaselist.o : phaselist.c phaseloclist.h  GridLib.h
+
+loclist.o : loclist.c phaseloclist.h  GridLib.h
+
+otime_limit.o : otime_limit.c otime_limit.h
+
+calc_crust_corr.o :   GridLib.h calc_crust_corr.c crust_corr_model.h  crust_type.h  crust_type_key.h
+
+#
+# --------------------------------------------------------------------------
