@@ -1,0 +1,15 @@
+# GMT common arguments shelf
+-B100:Travel Time:/:sec:
+-Jpa0.002/90
+-R0/180/5678/6378
+-X2
+-x0
+-Y5
+-y0
+-jpa0.002/90
+EOF
+6378
+-X2
+-Y5
+-jpa0.002/90
+EOF

@@ -1,0 +1,128 @@
+
+# =============================================================================
+#  Sample NonLinLoc programs control file
+#
+#  NonLinLoc Version 2.3 - FEB2000
+#
+#  Anthony Lomax <lomax@faille.unice.fr>
+#
+#  See "Control File" and "Running the Sample Location" pages 
+#     in the NonLicLoc on-line documentation:
+#     http://www-geoazur.unice.fr/~lomax/nlloc
+# =============================================================================
+
+
+# = comment
+
+# non-nested include files allowed, use:
+# INCLUDE <include_file_name>
+
+
+# =============================================================================
+# =============================================================================
+# Generic control file statements
+# =============================================================================
+#
+#
+
+# control (CONTROL message_flag (0:silent,1:few messages,2:verbose,...), 
+#		RandomNumSeed)
+CONTROL 2 54321
+
+# -----------------------------------------------------------------------------
+# lat/long to rect grid transformation
+# -----------------------------------------------------------------------------
+
+# map projection / transformation
+# (TRANS type <params>)
+#    (char[])   search_type (SIMPLE, LAMBERT)
+#    <params>:
+#	SIMPLE LatOrig  LongOrig  RotCW 
+#	LAMBERT  RefEllipsoid LatOrig  LongOrig  
+#                   FirstStdParal  SecondStdParal   RotCW
+#
+#    RefEllipsoid choices: 
+#                   WGS-84, GRS-80, WGS-72, Australian, Krasovsky, 
+#                   International, Hayford-1909, Clarke-1880, Clarke-1866, 
+#                   Airy, Bessel, Hayford-1830, Sphere
+#
+#
+# Lambert III France - IGN (except that origin is arbitrary)
+#TRANS  LAMBERT  Clarke-1880  43.75 7.5  43.1993 44.9961  0.0
+TRANS  SIMPLE  44.5 -110.75  0.0
+
+# maplines (MAPLINE id_num, name, red, green, blue,
+#	linestyle (SOLID, DASHED, DOTTED, DASHDOT))
+#MAPLINE  GMT_LONLAT ./data_geog/map.prov.line  0.0 0.0 0.0  SOLID
+#MAPLINE  XY_LONLAT /u/cayman/1/users/lomax/data_geog/maps/france/prov.line  0.0 0.0 0.0  SOLID
+
+# plot grid for GMT
+#MAPGRID 40 40 20 -40.0 0.0 -4.0 1.0 1.0 1.0 PROB_DENSITY
+#
+#
+# =============================================================================
+# END of Generic control file statements
+# =============================================================================
+# =============================================================================
+
+
+=============================================================================
+# Vel2Grid3D control file statements (Ver 03)
+#
+=============================================================================
+#
+#
+
+# input filename / type
+# (VGINP <input file> <file type> <params>)
+#    (char[])   filename of the input file
+#    (char[])   type of the input file (SIMUL2K, FDTOMO)
+# 
+# SIMUL2K - orig_x orig_y orig_z
+#
+#
+# Note:  orig_x, orig_y, orig_z are no longer in use for SIMUL2K option
+#        set to zero
+#
+VGINP  velomod.out.Vp SIMUL2K 0.0 0.0 0.0
+
+# output filename root
+# (VGOUT <output file root>)
+#
+VGOUT  ./mod3D
+
+# wave type
+# (VGTYPE wave_type (P))
+#
+VGTYPE P
+
+# grid description
+# (GRID  num_grid_x  num_grid_y  num_grid_z 
+#        orig_grid_x  orig_grid_y  orig_grid_z
+#        d_grid_x d_grid_y d_grid_z
+#        type
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type :
+#         VELOCITY = km/s,
+#         VELOCITY_METERS = m/s,
+#         SLOWNESS = s/km,
+#         VEL2 = vel**2,
+#         SLOW2 = slow**2,
+#         SLOW_2_METERS = slow**2 ((s/m)**2),
+#         SLOW_LEN = slow*d_grid)
+#
+#
+# Layer 2DGrid (NOTE: num_grid_x must be = 2 for 2D grids
+#
+VGGRID  130 180 25 -60.0 -110.0 -4.0  1.0 1.0 1.0 SLOW_LEN
+
+#
+=============================================================================
+# END of Vel2Grid3D control file statements
+#
+=============================================================================
+#

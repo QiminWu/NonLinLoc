@@ -1,0 +1,851 @@
+
+#  Control file for program GridGen
+
+# = comment
+
+
+# =============================================================================
+# =============================================================================
+# General input
+# =============================================================================
+#
+#
+
+# control (CONTROL message_flag (0:silent,1:few messages,2:verbose))
+CONTROL 1
+
+
+
+# -----------------------------------------------------------------------------
+# lat/long to rect grid transformation
+# -----------------------------------------------------------------------------
+
+# transformation (TRANS lat_orig, long_orig, rot
+TRANS  37.95  -122.77  -52.05
+
+# maplines (MAPLINE id_num, name, red, green, blue,
+#	linestyle (SOLID, DASHED, DOTTED, DASHDOT))
+MAPLINE  1 /u/cayman/1/users/lomax/data_geog/maps/centcal.line  0.0 1.0 0.0  SOLID
+#MAPLINE  1 /u/cayman/1/users/lomax/data_geog/maps/sfbay.line  0.0 1.0 0.0  SOLID
+
+
+#
+#
+# =============================================================================
+# END of General input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Vel2Grid input
+# =============================================================================
+#
+#
+
+# output filename root
+# (VGOUT <output file root>)
+VGOUT ex01
+
+
+# grid description
+# (GRID  num_grid_x  num_grid_y  num_grid_z
+#	orig_grid_x  orig_grid_y  orig_grid_z
+#	d_grid_x d_grid_y d_grid_z
+#       type
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (VELOCITY, SLOWNESS, VEL2 = vel**2, SLOW2 = slow**2
+#			SLOW_LEN = slow*d_grid)
+GRID  61 51 21  0.0 -40.0 0.0  2.5 2.5 2.5  SLOW_LEN
+
+
+# -----------------------------------------------------------------------------
+# velocity model description
+# -----------------------------------------------------------------------------
+
+
+# Notes:
+#  This file was extracted from the waveray input file in.3d.lp17.2
+#		by Anthony Lomax, 20 DEC 1996
+#
+#
+# 10Feb92 in.3d.lp3	Complex Bay alluvium solid contact added
+#					New Salinian / Franciscan model
+# 14Feb92 in.3d.lp5	Mud / Alluvium thickness * 2
+#					Hyp depth => 8
+#					Vertex 2121  z: 0.2 => 0.4 
+# 18Feb92 in.3d.lp6	V2121 z:0.4=>0.6  V2222 z:0.6=>0.8  V2222 z:0.5=>0.7
+#					Franciscan & Gabilan changed 
+# 19Feb92 in.3d.lp7	Deep basin added under SW Bay (Solids 24 & 25)
+# 					Vertex 2121 => 83,15
+# 20Feb92 in.3d.lp8	Deep basin added E of San Jose (Solids 26 & 27)
+#					Vertex 2112 => 115,26
+# 20Feb92 in.3d.lp9	"True" depths restored (~ gravity)
+#					Alluvium vel => s=0.30  ds=0.5
+# 					Vertex 2121 => 78,15
+# 21Feb92 			Deep basin under SW Bay  depth => 1500m (considering
+#						regional gravity graident)
+# 					Source => 135,5  (considering increased strike slip and
+#						total slip ~ 5km SE of hypocenter, see SSA articles)
+# 22Feb92 ..3d.lp10	Source back to 130,2 
+# 24Feb92 ..3d.lp11	Franciscan lower crust removed & Moho => 23 km
+#						(to focus cusp on SF) 
+# 25Feb92 ..3d.lp12	Franciscan and Salinian gradient increased &
+#						Franciscan vel increased (to focus cusp on SF) 
+# 25Feb92 ..3d.lp13	Moho => 24 km, Franciscan & Salinian vel changed
+#						(to focus 2s cusp on SF & N of Sierra Pt)
+# 26Feb92 ..3d.lp14 Franciscan & Salinian vel grad increased
+# 04Mar92 ..3d.lp15	Deep basin E of San Jose extended to South (Solid 28)
+# 					Vertex 2113 => 109,19
+# 					Vertex 2112 => 111,30
+# 04Mar92 ..3d.lp15d	Depth => 12 km
+# 04Mar92 ..3d.lp16	Moho => 25 km
+# 09Mar92 ..3d.lp17	Source => 130,4 onto fault plane 
+
+
+# Comment (COMM comment text)
+COMM Loma Prieta 3D Model  (San Francisco Bay Area)
+
+
+# control parameters (CONTROL prog_mode_3d)
+#	prog_mode_3d:	0 = 2D, 1 = 3D
+#!!CONTROL 1
+
+
+# output file name (OUTPUT fname)
+#OUTPUT sfbay_3d.out
+
+
+
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# SF Bay 3D model  (see Anthony's PhD thesis for details)
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+
+
+
+# -----------------------------------------------------------------------------
+# polygon model definitions
+# -----------------------------------------------------------------------------
+ 
+# vertex (VERTEX  id_num, zloc, xloc, yloc (2-D yloc ingnored))
+### Franciscan (1)
+VERTEX  111   0.0  -20.0   100.0
+VERTEX  112   0.0  260.0   100.0
+VERTEX  113   0.0  260.0    30.0
+VERTEX  114   0.0  100.0     0.0
+VERTEX  115   0.0   50.0     0.0
+VERTEX  116   0.0  -20.0     7.0
+VERTEX  121  25.0  -20.0   100.0
+VERTEX  122  25.0  260.0   100.0
+VERTEX  123  25.0  260.0    30.0
+VERTEX  124  25.0  100.0     0.0
+VERTEX  125  25.0   50.0     0.0
+VERTEX  126  25.0  -20.0     7.0
+### Alluvium  (21)
+VERTEX  2111   0.0   85.0    29.0
+VERTEX  2112   0.0  111.0    30.0
+VERTEX  2113   0.0  109.0    19.0
+VERTEX  2114   0.0  100.0     5.0
+VERTEX  2115   0.0   82.0     7.0
+VERTEX  2121   0.2   78.0    15.0
+#VERTEX  2121   0.1   83.0    15.0
+#VERTEX  2121   0.6   84.0    20.0
+### Alluvium  (22)
+VERTEX  2211   0.0   51.0    30.0
+VERTEX  2212   0.0   85.0    29.0
+VERTEX  2213   0.0   82.0     7.0
+VERTEX  2214   0.0   50.0     2.0
+VERTEX  2215   0.0   42.0    14.0
+VERTEX  2216   0.0   40.0    28.0
+VERTEX  2221   0.30   48.0    25.0
+VERTEX  2222   0.40   68.0    25.0
+VERTEX  2224   0.45   68.0    16.0
+VERTEX  2225   0.25   45.0    15.0
+VERTEX  2226   0.20   41.0    23.0
+### Alluvium  (23)
+VERTEX  2311   0.0   18.0    32.0
+VERTEX  2312   0.0   40.0    28.0
+VERTEX  2313   0.0   42.0    14.0
+VERTEX  2314   0.0   33.0    16.0
+VERTEX  2315   0.0   26.0    18.0
+VERTEX  2316   0.0   14.0    23.0
+VERTEX  2321   0.1   16.0    28.0
+VERTEX  2322   0.3   30.0    24.0
+### Alluvium  (24)
+VERTEX  2421   1.5   98.0    10.0
+### Alluvium  (26)
+VERTEX  2621   2.0   93.0    24.0
+### Alluvium  (27)
+VERTEX  2721   2.0  105.0    24.0
+### Alluvium  (28)
+VERTEX  2811   0.0  128.0    28.0
+### Mud  (31)
+VERTEX  3111   0.0   77.0    20.0
+VERTEX  3112   0.0   89.0    25.0
+VERTEX  3113   0.0   90.0    19.0
+VERTEX  3114   0.0   81.0    11.0
+VERTEX  3115   0.0   76.0    12.0
+VERTEX  3121   0.1   77.0    20.0
+VERTEX  3122   0.1   89.0    25.0
+VERTEX  3123   0.1   90.0    19.0
+VERTEX  3124   0.1   81.0    11.0
+VERTEX  3125   0.1   76.0    12.0
+### Mud  (32)
+VERTEX  3211   0.0   39.0    23.0
+VERTEX  3212   0.0   48.0    26.0
+VERTEX  3213   0.0   77.0    20.0
+VERTEX  3214   0.0   76.0    12.0
+VERTEX  3215   0.0   70.0     7.0
+VERTEX  3216   0.0   50.0     4.0
+VERTEX  3217   0.0   42.0    14.0
+VERTEX  3221   0.1   39.0    23.0
+VERTEX  3222   0.1   48.0    26.0
+VERTEX  3223   0.1   77.0    20.0
+VERTEX  3224   0.1   76.0    12.0
+VERTEX  3225   0.1   70.0     7.0
+VERTEX  3226   0.1   50.0     4.0
+VERTEX  3227   0.1   42.0    14.0
+### Mud  (33)
+VERTEX  3311   0.0   20.0    29.0
+VERTEX  3312   0.0   28.0    29.0
+VERTEX  3313   0.0   39.0    23.0
+VERTEX  3314   0.0   42.0    14.0
+VERTEX  3315   0.0   33.0    16.0
+VERTEX  3316   0.0   26.0    18.0
+VERTEX  3317   0.0   14.0    23.0
+VERTEX  3321   0.1   20.0    29.0
+VERTEX  3322   0.1   28.0    29.0
+VERTEX  3323   0.1   39.0    23.0
+VERTEX  3324   0.1   42.0    14.0
+VERTEX  3325   0.1   33.0    16.0
+VERTEX  3326   0.1   26.0    18.0
+VERTEX  3327   0.1   14.0    23.0
+
+# edge (EDGE  id_num, vertex 1, vertex 2)
+### Franciscan (1)
+EDGE    111   111   112
+EDGE    112   112   113
+EDGE    113   113   114
+EDGE    114   114   115
+EDGE    115   115   116
+EDGE    116   116   111
+EDGE    121   121   122
+EDGE    122   122   123
+EDGE    123   123   124
+EDGE    124   124   125
+EDGE    125   125   126
+EDGE    126   126   121
+EDGE    101   111   121		0
+EDGE    102   112   122		0
+EDGE    103   113   123		0
+EDGE    104   114   124		0
+EDGE    105   115   125		0
+EDGE    106   116   126		0
+### Alluvium  (21)
+EDGE    2111   2111   2112
+EDGE    2112   2112   2113
+EDGE    2113   2113   2114
+EDGE    2114   2114   2115
+EDGE    2115   2115   2111  2
+EDGE    2121   2121   2111	2
+EDGE    2122   2121   2112	2
+EDGE    2123   2121   2113	2
+EDGE    2124   2121   2114	2
+EDGE    2125   2121   2115	2
+### Alluvium  (22)
+EDGE    2211   2211   2212
+EDGE    2212   2212   2213  2
+EDGE    2213   2213   2214
+EDGE    2214   2214   2215
+EDGE    2215   2215   2216  2
+EDGE    2216   2216   2211  
+EDGE    2221   2221   2211	2
+EDGE    2222   2211   2222 	2
+EDGE    2223   2222   2212	2
+EDGE    2224   2224   2111	2
+EDGE    2225   2121   2224	2  
+EDGE    2226   2213   2224	2  
+EDGE    2227   2214   2224	2  
+EDGE    2228   2214   2225	2  
+EDGE    2229   2215   2225	2  
+EDGE    2230   2215   2226	2  
+EDGE    2231   2216   2226	2  
+EDGE    2232   2216   2221	2  
+EDGE    2233   2221   2222	2  
+EDGE    2234   2222   2224	2  
+EDGE    2235   2224   2225	2  
+EDGE    2236   2225   2226	2  
+EDGE    2237   2226   2221	2  
+EDGE    2238   2225   2221	2  
+EDGE    2239   2221   2224	2  
+### Alluvium  (23)
+EDGE    2311   2311   2312
+EDGE    2312   2312   2313  2
+EDGE    2313   2313   2314
+EDGE    2314   2314   2315
+EDGE    2315   2315   2316
+EDGE    2316   2316   2311
+EDGE    2321   2311   2322	2
+EDGE    2322   2312   2322	2  
+EDGE    2323   2226   2322	2
+EDGE    2324   2313   2322	2
+EDGE    2325   2314   2322	2
+EDGE    2326   2315   2322	2
+EDGE    2327   2316   2322	2
+EDGE    2328   2321   2322	2
+EDGE    2329   2311   2321	2
+EDGE    2330   2321   2316	2
+### Alluvium  (24)
+EDGE    2421   2421   2113	2
+EDGE    2422   2421   2114	2
+EDGE    2423   2421   2121	2
+### Alluvium  (25)
+EDGE    2521   2421   2115	2
+### Alluvium  (26)
+EDGE    2621   2621   2112	2
+EDGE    2622   2621   2121	2
+EDGE    2623   2621   2111	2
+### Alluvium  (27)
+EDGE    2721   2721   2112	2
+EDGE    2722   2721   2113	2
+EDGE    2723   2721   2121	2
+EDGE    2724   2721   2621	2
+### Alluvium  (28)
+EDGE    2811   2811   2113	
+EDGE    2812   2811   2112	
+EDGE    2822   2811   2721	2
+### Mud  (31)
+EDGE    3111   3111   3112
+EDGE    3112   3112   3113
+EDGE    3113   3113   3114
+EDGE    3114   3114   3115
+EDGE    3115   3115   3111  2
+EDGE    3121   3121   3122
+EDGE    3122   3122   3123
+EDGE    3123   3123   3124
+EDGE    3124   3124   3125
+EDGE    3125   3125   3121  2
+EDGE    3101   3111   3121
+EDGE    3102   3112   3122
+EDGE    3103   3113   3123
+EDGE    3104   3114   3124
+EDGE    3105   3115   3125
+### Mud  (32)
+EDGE    3211   3211   3212
+EDGE    3212   3212   3213
+EDGE    3213   3213   3214  2
+EDGE    3214   3214   3215
+EDGE    3215   3215   3216
+EDGE    3216   3216   3217
+EDGE    3217   3217   3211  2
+EDGE    3221   3221   3222	2
+EDGE    3222   3222   3223	2
+EDGE    3223   3223   3224  2
+EDGE    3224   3224   3225	2
+EDGE    3225   3225   3226	2
+EDGE    3226   3226   3227	2
+EDGE    3227   3227   3221  2
+EDGE    3201   3211   3221
+EDGE    3202   3212   3222
+EDGE    3203   3213   3223
+EDGE    3204   3214   3224
+EDGE    3205   3215   3225
+EDGE    3206   3216   3226
+EDGE    3207   3217   3227
+### Mud  (33)
+EDGE    3311   3311   3312
+EDGE    3312   3312   3313
+EDGE    3313   3313   3314  2
+EDGE    3314   3314   3315
+EDGE    3315   3315   3316
+EDGE    3316   3316   3317
+EDGE    3317   3317   3311
+EDGE    3321   3321   3322
+EDGE    3322   3322   3323
+EDGE    3323   3323   3324  2
+EDGE    3324   3324   3325
+EDGE    3325   3325   3326
+EDGE    3326   3326   3327
+EDGE    3327   3327   3321
+EDGE    3301   3311   3321
+EDGE    3302   3312   3322
+EDGE    3303   3313   3323
+EDGE    3304   3314   3324
+EDGE    3305   3315   3325
+EDGE    3306   3316   3326
+EDGE    3307   3317   3327
+
+# 3-D polygon
+#	(POLYGON3 id_num,n_edges
+#	[newline]		edge 1, edge 2, ...)
+### Franciscan (1)
+POLYGON3  111  6
+	111 112 113 114 115 116
+POLYGON3  121  6
+	121 122 123 124 125 126
+POLYGON3  101  4
+	101 111 102 121
+POLYGON3  102  4
+	102 112 103 122
+POLYGON3  103  4
+	103 113 104 123
+POLYGON3  104  4
+	104 114 105 124
+POLYGON3  105  4
+	105 115 106 125
+POLYGON3  106  4
+	106 116 101 126
+### Alluvium  (21)
+POLYGON3  2111  5
+    2111 2112 2113 2114 2115
+POLYGON3  2121  3
+    2121 2111 2122
+POLYGON3  2122  3
+    2122 2112 2123
+POLYGON3  2123  3
+    2123 2113 2124
+POLYGON3  2124  3
+    2124 2114 2125
+POLYGON3  2125  3
+    2125 2115 2121
+### Alluvium  (22)
+POLYGON3  2211  6
+    2211 2212 2213 2214 2215 2216
+POLYGON3  2221  3
+    2211 2222 2223
+POLYGON3  2222  3
+    2223 2224 2234
+POLYGON3  2223  3
+    2225 2226 2125
+POLYGON3  2224  3
+    2226 2227 2213
+POLYGON3  2225  3
+    2228 2229 2214
+POLYGON3  2226  3
+    2215 2230 2231
+POLYGON3  2227  3
+    2232 2216 2221
+POLYGON3  2228  3
+    2221 2222 2233
+POLYGON3  2229  3
+    2224 2225 2121
+POLYGON3  2230  3
+    2227 2228 2235
+POLYGON3  2231  3
+    2229 2230 2236
+POLYGON3  2232  3
+    2231 2232 2237
+POLYGON3  2233  3
+    2236 2237 2238
+POLYGON3  2234  3
+    2235 2238 2239
+POLYGON3  2235  3
+    2233 2234 2239
+### Alluvium  (23)
+POLYGON3  2311  6
+    2311 2312 2313 2314 2315 2316
+POLYGON3  2321  3
+    2321 2322 2311
+POLYGON3  2322  3
+    2322 2323 2231
+POLYGON3  2323  3
+    2312 2323 2324
+POLYGON3  2324  3
+    2325 2326 2314
+POLYGON3  2325  3
+    2326 2327 2315
+POLYGON3  2326  3
+    2327 2328 2330
+POLYGON3  2327  3
+    2321 2328 2329
+POLYGON3  2328  3
+    2329 2330 2316
+POLYGON3  2329  3
+    2323 2313 2325
+### Alluvium  (24)
+POLYGON3  2411  3
+    2123 2124 2113
+POLYGON3  2421  3
+    2123 2423 2421
+POLYGON3  2422  3
+    2113 2422 2421
+POLYGON3  2423  3
+    2124 2422 2423
+### Alluvium  (25)
+POLYGON3  2521  3
+    2521 2125 2423
+POLYGON3  2522  3
+    2521 2114 2422
+### Alluvium  (26)
+POLYGON3  2621  3
+    2621 2623 2111
+POLYGON3  2622  3
+    2621 2622 2122
+POLYGON3  2623  3
+    2622 2623 2121
+### Alluvium  (27)
+POLYGON3  2721  3
+    2721 2722 2112
+POLYGON3  2722  3
+    2722 2723 2123
+POLYGON3  2723  3
+    2723 2724 2622
+POLYGON3  2724  3
+    2724 2721 2621
+### Alluvium  (28)
+POLYGON3  2811  3
+    2112 2812 2811
+POLYGON3  2821  3
+    2722 2822 2811
+POLYGON3  2822  3
+    2721 2822 2812
+### Mud  (31)
+POLYGON3  3111  5
+    3111 3112 3113 3114 3115
+POLYGON3  3121  5
+    3121 3122 3123 3124 3125
+POLYGON3  3101  4
+    3101 3111 3102 3121
+POLYGON3  3102  4
+    3102 3112 3103 3122
+POLYGON3  3103  4
+    3103 3113 3104 3123
+POLYGON3  3104  4
+    3104 3114 3105 3124
+POLYGON3  3105  4
+    3105 3115 3101 3125
+### Mud  (32)
+POLYGON3  3211  7
+    3211 3212 3213 3214 3215 3216 3217
+POLYGON3  3221  7
+    3221 3222 3223 3224 3225 3226 3227
+POLYGON3  3201  4
+    3201 3211 3202 3221
+POLYGON3  3202  4
+    3202 3212 3203 3222
+POLYGON3  3203  4
+    3203 3213 3204 3223
+POLYGON3  3204  4
+    3204 3214 3205 3224
+POLYGON3  3205  4
+    3205 3215 3206 3225
+POLYGON3  3206  4
+    3206 3216 3207 3226
+POLYGON3  3207  4
+    3207 3217 3201 3227
+### Mud  (33)
+POLYGON3  3311  7
+    3311 3312 3313 3314 3315 3316 3317
+POLYGON3  3321  7
+    3321 3322 3323 3324 3325 3326 3327
+POLYGON3  3301  4
+    3301 3311 3302 3321
+POLYGON3  3302  4
+    3302 3312 3303 3322
+POLYGON3  3303  4
+    3303 3313 3304 3323
+POLYGON3  3304  4
+    3304 3314 3305 3324
+POLYGON3  3305  4
+    3305 3315 3306 3325
+POLYGON3  3306  4
+    3306 3316 3307 3326
+POLYGON3  3307  4
+    3307 3317 3301 3327
+
+# 3-D solid
+#	(SOLID id_num,n_poly,ref,Vp_ref,Vp_grad,Vs_ref,Vs_grad,p_ref,p_grad
+#	[newline]		poly 1, poly 2, ...)
+### Mud  (31)
+SOLID  311  7  0.0  0.4 0.2   0.10  6.0    1.2 0.0
+    3111 3121 3101 3102 3103 3104 3105
+### Mud  (32)
+SOLID  321  9  0.0  0.4 0.2   0.10  6.0    1.2 0.0
+    3211 3221 3201 3202 3203 3204 3205 3206 3207
+### Mud  (33)
+SOLID  331  9  0.0  0.4 0.2   0.10  6.0    1.2 0.0
+    3311 3321 3301 3302 3303 3304 3305 3306 3307
+### Alluvium  (21)
+SOLID  211  6  0.0  1.5 0.5    0.30  0.5    2.0 0.0
+    2111 2121 2122 2123 2124 2125
+### Alluvium  (22)
+SOLID  221  17  0.0  1.5 0.5   0.30  0.5    2.0 0.0
+    2211 2221 2222 2223 2224 2225 2226 2227 2228 2229 2230 2231 2232 2233 2234
+	2235 2125
+### Alluvium  (23)
+SOLID  231  11  0.0  1.5 0.5   0.30  0.5    2.0 0.0
+    2311 2321 2322 2323 2324 2325 2326 2327 2328 2329 2226
+### Alluvium  (24)
+SOLID  241   4  0.0  1.5 0.5   0.30  0.5    2.0 0.0
+    2411 2421 2422 2423
+### Alluvium  (25)
+SOLID  251   4  0.0  1.5 0.5   0.30  0.5    2.0 0.0
+    2124 2423 2521 2522
+### Alluvium  (26)
+SOLID  261   4  0.0  1.5 0.5   0.30  0.5    2.0 0.0
+    2621 2622 2623 2121
+### Alluvium  (27)
+SOLID  271   6  0.0  1.5 0.5   0.30  0.5    2.0 0.0
+    2721 2722 2723 2724 2622 2122
+### Alluvium  (28)
+SOLID  281   4  0.0  1.5 0.5   0.30  0.5    2.0 0.0
+    2811 2821 2822 2721
+### Franciscan East of Hayward(1)
+#SOLID  11  8  0.75  5.4 0.15   3.2  0.03    2.6 0.0
+#	111 121 101 102 103 104 105 106
+### Franciscan (1)
+SOLID  11  8  0.75  5.4 0.15   3.2  0.03    2.6 0.0
+	111 121 101 102 103 104 105 106
+
+# -----------------------------------------------------------------------------
+# layer model definitions
+# -----------------------------------------------------------------------------
+
+# model layers (LAYER depth, Vp_top, Vp_grad, Vs_top, Vs_grad, p_top, p_grad)
+#LAYER   0.0  5.4 0.15    2.5  1.1    2.2 0.0
+#LAYER   0.0  5.4 0.15    3.0  0.6    2.2 0.0
+LAYER   0.0  6.3 0.02    3.45  0.02  2.7 0.0
+#LAYER  15.0  7.2 0.02    3.6  0.02  2.7 0.0
+LAYER  25.0  8.0 0.01    4.4  0.005  3.3 0.0
+#LAYER  26.5  8.0 0.01    4.5  0.005  3.3 0.0
+
+
+# -----------------------------------------------------------------------------
+# model graphic display elements
+# -----------------------------------------------------------------------------
+
+# station (#STATION id_num, name, xloc, yloc, zloc (2-D yloc ignored))
+#STATION 11 CFH   29.   7.   0.0  
+#STATION 12 CAL   33.  13.   0.0
+#STATION 13 RIN   36.  16.   0.0
+#STATION 14 YBI   35.  19.   0.0
+#STATION 15 EMV   35.  26.   0.0
+#STATION 16 PMT   42.  30.   0.0
+#STATION 17 PBA   25.   9.   0.0
+#STATION 18 SPT   45.   8.   0.0
+#STATION 19 OHW   37.  23.   0.0
+#STATION 20 2ST   41.  26.   0.0
+#STATION 21 RCH   25.  28.   0.0
+#STATION 22 LBL   35.  32.   0.0
+#STATION 23 FRE   84.  31.   0.0
+#STATION 24 SF1   50.   5.   0.0
+#STATION 25 PUL   66.   0.   0.0
+#STATION 26 TRI   33.  20.   0.0
+#STATION 27 CSU   64.  30.   0.0
+#STATION 28 FOS   62.  10.   0.0
+
+# maplines (MAPLINE id_num, name, lat_orig, long_orig, rot,
+#	linestyle (SOLID, DASHED, DOTTED, DASHDOT))
+#	(2-D ignored)
+#MAPLINE  1 ../maps/sfbay.line  37.95  -122.77  -52.05  SOLID
+
+# user graphic text (#GTEXT plot (SECT or MAP), string,
+#	xloc, yloc, zloc, rotation (deg) (SECT yloc ignored, MAP zloc ignored))
+#GTEXT MAP   SAF     140.0   9.0   0.0   11
+#GTEXT SECT  Moho    135.0   0.0  21.5    0
+#GTEXT MAP   SF       33.0   8.0   0.0    0
+#GTEXT SECT  SF       33.0   0.0  -3.0    0
+#GTEXT MAP   Pacific  45.0 -18.0   0.0  -20
+#GTEXT MAP   Ocean    65.0 -24.75  0.0  -12
+#GTEXT MAP   SC      123.0 -15.0   0.0    0
+##GTEXT SECT  SC      123.0   0.0  -3.0    0
+
+
+#
+#
+# =============================================================================
+# END of Vel2Grid input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Grid2Time input
+# =============================================================================
+#
+#
+
+# input, output filename root
+# (GTFILES <input file root> <output file root>)
+GTFILES ex01 ex01
+#GTFILES ex01.smo ex01.smo
+
+# source description (multiple sources can be specified)
+# (SRCE  label  x_srce  y_srce   z_srce
+#    (char[])   label
+#    (char[])   loc type (XYZ or LATLON)
+#              XYZ------------------       LATLON----------
+#    (float)   x_srce : km pos east    or  lat   : pos north
+#    (float)   y_srce : km pos north   or  long  : pos east
+#    (float)   z_srce : km pos down    or  depth : pos down
+#SRCE  EQ   XYZ	100.0  0.0  15.0
+SRCE  RCH   XYZ	25.  28.   0.0
+SRCE  PBA   XYZ	25.   9.   0.0
+#SRCE  CFH   XYZ	29.   7.   0.0  
+SRCE  CAL   XYZ	33.  13.   0.0
+#SRCE  TRI   XYZ	33.  20.   0.0
+#SRCE  YBI   XYZ	35.  19.   0.0
+#SRCE  LBL   XYZ	35.  32.   0.0
+#SRCE  EMV   XYZ	35.  26.   0.0
+#SRCE  RIN   XYZ	36.  16.   0.0
+SRCE  OHW   XYZ	37.  23.   0.0
+#SRCE  2ST   XYZ	41.  26.   0.0
+SRCE  PMT   XYZ	42.  30.   0.0
+SRCE  SPT   XYZ	45.   8.   0.0
+SRCE  SF1   XYZ	50.   5.   0.0
+SRCE  FOS   XYZ	62.  10.   0.0
+SRCE  CSU   XYZ	64.  30.   0.0
+SRCE  PUL   XYZ	66.   0.   0.0
+SRCE  FRE   XYZ	84.  31.   0.0
+SRCE  XXX   LATLON	37.95	-122.77	0.0
+
+# Podvin & Lecomte FD params
+# (PLFD  hs_eps_init  message_flag)
+#    (float) hs_eps_init : fraction (typically 1.0E-3) defining the toler-  
+#                          ated model inhomogeneity for exact initialization.
+#                          A tolerance larger than 0.01 will potentially     
+#                          create errors larger than those involved by the   
+#                          F.D. scheme without any exact initialization.     
+#    (int)  message_flag : Message flag (0:silent,1:few messages,2:verbose)  
+#                          A negative value inhibits "clever"
+#                          nitialization.
+PLFD  1.0e-3  1
+
+#
+#
+# =============================================================================
+# END of Grid2Time input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Time2EQ input
+# =============================================================================
+#
+#
+
+
+# input  grid filenames root, output filename
+# (EQFILES <input file root> <output file>)
+EQFILES ex01 ex01.synth_obs
+
+# event description
+# (EQEVENT  label  x_event  y_event  z_event  otime
+#    (char[])   label
+#    (float)   x_event : km pos east
+#    (float)   y_event : km pos north
+#    (float)   z_event : km pos down
+#    (float)   otime   : sec
+EQEVENT  EQ001   100.0 0.0 15.0  10.0
+
+
+# station description (multiple stations can be specified)
+# (EQSTA  label  x_sta  y_sta   z_sta
+#    (char[])   label
+#    (float)   x_sta : km pos east
+#    (float)   y_sta : km pos north
+#    (float)   z_sta : km pos down
+#    (float)   error : 
+EQSTA  RCH	GAU 0.2
+EQSTA  PBA	GAU 0.2
+#EQSTA  CFH  	GAU 0.2
+EQSTA  CAL	GAU 0.2
+#EQSTA  TRI	GAU 0.2
+#EQSTA  YBI	GAU 0.2
+#EQSTA  LBL	GAU 0.2
+#EQSTA  EMV	GAU 0.2
+#EQSTA  RIN	GAU 0.2
+EQSTA  OHW	GAU 0.2
+#EQSTA  2ST	GAU 0.2
+EQSTA  PMT	GAU 0.2
+EQSTA  SPT	GAU 0.2
+EQSTA  SF1	GAU 0.2
+EQSTA  FOS	GAU 0.2
+EQSTA  CSU	GAU 0.2
+EQSTA  PUL	GAU 0.2
+EQSTA  FRE	GAU 0.2
+
+
+
+#
+#
+# =============================================================================
+# END of Time2EQ input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# GridLoc input
+# =============================================================================
+#
+#
+
+
+# comment
+# (LOCCOM comment)
+LOCCOM San Francisco Bay - Loma Prieta 
+
+
+# method
+# (LOCMETH method (GAU_ANALYTIC))
+LOCMETH GAU_ANALYTIC
+
+
+# gaussian error parameters
+# (LOCGAU Sigma_T (s), CorrLen (km))
+#LOCGAU 0.2 0.1
+LOCGAU 0.2 10.0
+
+
+# input  grid filenames root, output filename
+# (LOCFILES <input file root> <output file>)
+LOCFILES ex01.synth_obs ex01 ex01 
+
+
+# grid description
+# (LOCGRID  num_grid_x  num_grid_y  num_grid_z
+#	orig_grid_x  orig_grid_y  orig_grid_z
+#	d_grid_x d_grid_y d_grid_z
+#       type
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (PROB_DENSITY, MISFIT)
+LOCGRID  61 51 21  0.0 -40.0 0.0  2.5 2.5 2.5  MISFIT
+#LOCGRID  61 61 31  80.0 -40.0 0.0  1.0 1.0 1.0  PROB_DENSITY
+
+
+
+#
+#
+# =============================================================================
+# END of GridLoc input
+# =============================================================================
+# =============================================================================

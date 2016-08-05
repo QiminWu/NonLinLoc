@@ -628,6 +628,53 @@ int get_transform(int n_proj, char* in_line) {
             return (-1);
         }
 
+    } else if (strcmp(map_trans_type[n_proj], "TRANS_MERC") == 0) {
+
+        // 20160725 AJL - added TRANSVERSE MERCATOR PROJECTION (TM)
+
+        map_itype[n_proj] = MAP_TRANS_TM;
+        istat = sscanf(in_line, "%s %s %lf %lf %lf",
+                map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
+                &map_orig_lat[n_proj], &map_orig_long[n_proj],
+                &map_rot[n_proj]);
+
+        ierr = 0;
+        if (checkRangeDouble("TRANS",
+                "LatOrig", map_orig_lat[n_proj], 1, -90.0, 1, 90.0) != 0)
+            ierr = -1;
+        if (checkRangeDouble("TRANS",
+                "LongOrig", map_orig_long[n_proj], 1, -180.0, 1, 180.0) != 0)
+            ierr = -1;
+        if (checkRangeDouble("TRANS",
+                "RotCW", map_rot[n_proj], 1, -360.0, 1, 360.0) != 0)
+            ierr = -1;
+
+        angle = -cRPD * map_rot[n_proj];
+        map_cosang[n_proj] = cos(angle);
+        map_sinang[n_proj] = sin(angle);
+
+        // initialize GMT projection values
+        if (map_setup_proxy(n_proj, map_ref_ellipsoid[n_proj]) < 0) {
+            nll_puterr(
+                    "ERROR: initializing general transformation parameters, RefEllipsoid may be invalid");
+            return (-1);
+        }
+
+        // initialize projection
+        vtm(n_proj, map_orig_long[n_proj], map_orig_lat[n_proj]);
+
+        sprintf(MapProjStr[n_proj],
+                "TRANSFORM  %s RefEllipsoid %s  LatOrig %lf  LongOrig %lf  RotCW %lf",
+                map_trans_type[n_proj], map_ref_ellipsoid[n_proj],
+                map_orig_lat[n_proj], map_orig_long[n_proj],
+                map_rot[n_proj]);
+        nll_putmsg(3, MapProjStr[n_proj]);
+
+        if (ierr < 0 || istat != 5) {
+            nll_puterr("ERROR: reading TRANS_MERC transformation parameters");
+            return (-1);
+        }
+
     } else {
 
         nll_puterr("ERROR: unrecognized map transformation type");
@@ -2872,6 +2919,13 @@ int ReadArrival(char* line, ArrivalDesc* parr, int iReadType) {
             &(parr->period)
             );
 
+    // check for QUAL error type and convert to GAU error using LOCQUAL2ERR
+    // 20160727 AJL - added
+    if (strcmp(parr->error_type, "QUAL") == 0) {
+        parr->quality = (int) lround(parr->error);
+        Qual2Err(parr);
+    }
+
     // DEBUG
     /*printf("%s %s %s %s %s %s %ld %ld %lf %s %lf %lf %lf %lf %lf\n",
     parr->label,
@@ -3276,6 +3330,19 @@ double getGMTJVAL(int n_proj, char* jval_string, double xlen, double vxmax, doub
 
         return (gmt_scale);
 
+    } else if (map_itype[n_proj] == MAP_TRANS_TM) {
+
+        /* -Jtlon0/[lat0/]scale or -JTlon0/[lat0/]width (Transverse Mercator [C])
+           Give the central meridian lon0, central parallel lat0 (optional), and scale (1:xxxx or UNIT/degree).
+         */
+
+        gmt_scale = (ylen / (vymax - vymin)); // * (xmaxrect0 - xminrect0) / (xmaxrect - xminrect);
+        sprintf(jval_string, "-JT%lf/%lf/%lf",
+                map_orig_long[n_proj], map_orig_lat[n_proj],
+                xlen);
+
+        return (gmt_scale);
+
     }
 
     return (-1.0);
@@ -3375,6 +3442,17 @@ int latlon2rect(int n_proj, double dlat, double dlong, double* pxrect, double* p
         *pyrect = ytemp * map_cosang[n_proj] + xtemp * map_sinang[n_proj];
 
         return (0);
+
+    } else if (map_itype[n_proj] == MAP_TRANS_TM) {
+
+        tm(n_proj, dlong, dlat, &xtemp, &ytemp);
+        xtemp /= 1000.0; /* m -> km */
+        ytemp /= 1000.0; /* m -> km */
+        *pxrect = xtemp * map_cosang[n_proj] - ytemp * map_sinang[n_proj];
+        *pyrect = ytemp * map_cosang[n_proj] + xtemp * map_sinang[n_proj];
+
+        return (0);
+
     }
 
     return (-1);
@@ -3453,6 +3531,20 @@ int rect2latlon(int n_proj, double xrect, double yrect, double* pdlat, double* p
             *pdlong -= 360.0;
 
         return (0);
+
+    } else if (map_itype[n_proj] == MAP_TRANS_TM) {
+
+        xtemp = xrect * map_cosang[n_proj] + yrect * map_sinang[n_proj];
+        ytemp = yrect * map_cosang[n_proj] - xrect * map_sinang[n_proj];
+        itm(n_proj, pdlong, pdlat, xtemp * 1000.0, ytemp * 1000.0);
+        // 20121005 AJL - prevent longitude outside of -180 -> 180 deg range
+        if (*pdlong < -180.0)
+            *pdlong += 360.0;
+        else if (*pdlong > 180.0)
+            *pdlong -= 360.0;
+
+        return (0);
+
     }
 
     return (-1);
@@ -3465,7 +3557,8 @@ double rect2latlonAngle(int n_proj, double rectAngle) {
 
     if (map_itype[n_proj] == MAP_TRANS_SIMPLE ||
             map_itype[n_proj] == MAP_TRANS_SDC ||
-            map_itype[n_proj] == MAP_TRANS_LAMBERT) {
+            map_itype[n_proj] == MAP_TRANS_LAMBERT ||
+            map_itype[n_proj] == MAP_TRANS_TM) {
         angle = rectAngle - map_rot[n_proj];
         if (angle < 0.0)
             angle += 360.0;
@@ -3483,7 +3576,8 @@ double latlon2rectAngle(int n_proj, double latlonAngle) {
 
     if (map_itype[n_proj] == MAP_TRANS_SIMPLE ||
             map_itype[n_proj] == MAP_TRANS_SDC ||
-            map_itype[n_proj] == MAP_TRANS_LAMBERT) {
+            map_itype[n_proj] == MAP_TRANS_LAMBERT ||
+            map_itype[n_proj] == MAP_TRANS_TM) {
         angle = latlonAngle + map_rot[n_proj];
         if (angle < 0.0)
             angle += 360.0;

@@ -20,7 +20,7 @@ CC=gcc
 #
 GRID_FLOAT=
 # double precision grid files (not yet supported fully for NonLinLoc)
-GRID_FLOAT=-D GRID_FLOAT_TYPE_DOUBLE
+#GRID_FLOAT=-D GRID_FLOAT_TYPE_DOUBLE
 
 
 # Linux, Mac OS X ?
@@ -138,19 +138,6 @@ $(BINDIR)/diffTime : $(OBJS9)
 diffTime.o : diffTime.c GridLib.h
 	${CC} $(CCFLAGS) -c diffTime.c
 # --------------------------------------------------------------------------
-
-
-# --------------------------------------------------------------------------
-# Loc2ddct
-#
-OBJS10 = Loc2ddct.o $(GRID_LIB_OBJS)
-Loc2ddct_ : $(BINDIR)/Loc2ddct
-$(BINDIR)/Loc2ddct : $(OBJS10)
-	${CC} $(OBJS10) $(CCFLAGS) -o $(BINDIR)/Loc2ddct -lm
-Loc2ddct.o : Loc2ddct.c GridLib.h
-	${CC} $(CCFLAGS) -c Loc2ddct.c
-# --------------------------------------------------------------------------
-
 
 
 # --------------------------------------------------------------------------

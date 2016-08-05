@@ -1,0 +1,257 @@
+
+#  Control file for program GridGen
+
+# = comment
+
+
+# =============================================================================
+# =============================================================================
+# General input
+# =============================================================================
+#
+#
+
+# control (CONTROL message_flag (0:silent,1:few messages,2:verbose))
+CONTROL 1
+
+
+# -----------------------------------------------------------------------------
+# lat/long to rect grid transformation
+# -----------------------------------------------------------------------------
+
+# transformation (TRANS lat_orig, long_orig, rot
+TRANS  37.95  -122.77  -52.05
+
+
+#
+#
+# =============================================================================
+# END of General input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Vel2Grid input
+# =============================================================================
+#
+#
+
+# output filename root
+# (VGOUT <output file root>)
+VGOUT ./out/israel/ex2
+
+
+# grid description
+# (GRID  num_grid_x  num_grid_y  num_grid_z
+#	orig_grid_x  orig_grid_y  orig_grid_z
+#	d_grid_x d_grid_y d_grid_z
+#       type
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (VELOCITY, SLOWNESS, VEL2 = vel**2, SLOW2 = slow**2
+#			SLOW_LEN = slow*d_grid)
+GRID  33 53 14  150.0 145.0 -2.0  2.0 2.0 2.0  SLOW_LEN
+
+
+# -----------------------------------------------------------------------------
+# velocity model description
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# vel grid file
+# -----------------------------------------------------------------------------
+#
+#VGRID 1  -100.0 100.0  -100.0  100.0  ../../fdgrid/grad01.vel
+
+# -----------------------------------------------------------------------------
+# layer model definitions
+# -----------------------------------------------------------------------------
+#
+# (LAYER depth, Vp_top, Vp_grad, Vs_top, Vs_grad, p_top, p_grad)
+# Franciscan
+LAYER   0.0  3.5 0.00    4.4  0.000  3.0 0.0
+LAYER   2.1  5.7 0.00    4.4  0.000  3.0 0.0
+LAYER  12.7  6.4 0.00    4.4  0.000  3.0 0.0
+LAYER  28.2  7.9 0.00    4.4  0.000  3.0 0.0
+
+
+# -----------------------------------------------------------------------------
+# 3-D sphere inclusions
+# -----------------------------------------------------------------------------
+#
+# (SPHERE Zcent (pos UP), Xcent, Ycent, radius, Vp, Vs, den)
+#SPHERE   -25.0  120.0 1.0   20.0   2.0  1.0  2.6
+
+#
+#
+# =============================================================================
+# END of Vel2Grid input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Grid2Time input
+# =============================================================================
+#
+#
+
+# input, output filename root
+# (GTFILES <input file root> <output file root>)
+GTFILES ./out/israel/ex2 ./out/israel/ex2
+#GTFILES ./out/israel/ex2.smo ./out/israel/ex2.smo
+
+# source description (multiple sources can be specified)
+# (SRCE  label  x_srce  y_srce   z_srce
+#    (char[])   label
+#    (char[])   loc type (XYZ or LATLON)
+#              XYZ------------------       LATLON----------
+#    (float)   x_srce : km pos east    or  lat   : pos north
+#    (float)   y_srce : km pos north   or  long  : pos east
+#    (float)   z_srce : km pos down    or  depth : pos down
+SRCE  MML	XYZ	188.84	204.84	-0.51
+SRCE  KRPI	XYZ	202.80	206.00	 0.00
+SRCE  BLVR	XYZ	199.00	222.00	-0.14
+SRCE  GLH	XYZ	211.23	235.53	-0.34
+SRCE  ATZ	XYZ	175.51	247.59	-0.51
+SRCE  CRI	XYZ	153.86	231.99	-0.43
+SRCE  ZNT	XYZ	152.78	182.89	-0.31
+SRCE  JVI	XYZ	182.46	149.03	-0.69
+
+
+# Podvin & Lecomte FD params
+# (PLFD  hs_eps_init  message_flag)
+#    (float) hs_eps_init : fraction (typically 1.0E-3) defining the toler-  
+#                          ated model inhomogeneity for exact initialization.
+#                          A tolerance larger than 0.01 will potentially     
+#                          create errors larger than those involved by the   
+#                          F.D. scheme without any exact initialization.     
+#    (int)  message_flag : Message flag (0:silent,1:few messages,2:verbose)  
+#                          A negative value inhibits "clever"
+#                          nitialization.
+PLFD  1.0e-3  1
+
+#
+#
+# =============================================================================
+# END of Grid2Time input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# Time2EQ input
+# =============================================================================
+#
+#
+
+
+# input  grid filenames root, output filename
+# (EQFILES <input file root> <output file>)
+EQFILES ./out/israel/ex2 ./out/israel/ex2.synth_obs
+
+# event description
+# (EQEVENT  label  x_event  y_event   z_event
+#    (char[])   label
+#    (float)   x_event : km pos east
+#    (float)   y_event : km pos north
+#    (float)   z_event : km pos down
+EQEVENT  EQ001   100.0 1.0 25.0
+
+
+# station description (multiple stations can be specified)
+# (EQSTA  label  x_sta  y_sta   z_sta
+#    (char[])   label
+#    (float)   x_sta : km pos east
+#    (float)   y_sta : km pos north
+#    (float)   z_sta : km pos down
+#    (float)   error : 
+EQSTA  MML	GAU 1.0
+EQSTA  KRPI	GAU 1.0
+EQSTA  BLVR	GAU 1.0
+EQSTA  GLH	GAU 1.0
+EQSTA  ATZ	GAU 1.0
+EQSTA  CRI	GAU 1.0
+EQSTA  ZNT	GAU 1.0
+EQSTA  JVI	GAU 1.0
+
+
+
+#
+#
+# =============================================================================
+# END of Time2EQ input
+# =============================================================================
+# =============================================================================
+
+
+
+
+
+# =============================================================================
+# =============================================================================
+# GridLoc input
+# =============================================================================
+#
+#
+
+
+# comment
+# (LOCCOM comment)
+LOCCOM Israel (Moser, van Eck and Nolet, 1992) 
+
+
+# method
+# (LOCMETH method (GAU_ANALYTIC))
+LOCMETH GAU_ANALYTIC
+
+
+# gaussian error parameters
+# (LOCGAU Sigma_T (s), CorrLen (km))
+#LOCGAU 0.2 0.1
+LOCGAU 0.0 10.0
+
+
+# input  grid filenames root, output filename
+# (LOCFILES <input file root> <output file>)
+LOCFILES ./out/israel/israel.obs ./out/israel/ex2 ./out/israel/ex2 
+
+
+# grid description
+# (LOCGRID  num_grid_x  num_grid_y  num_grid_z
+#	orig_grid_x  orig_grid_y  orig_grid_z
+#	d_grid_x d_grid_y d_grid_z
+#       type
+#    (float) num_grid_x/y/z : number of nodes along x/y/z axis
+#    (float)    orig_grid_x : x location of grid origin (0,0,0) in km pos east
+#    (float)    orig_grid_y : y location of grid origin (0,0,0) in km pos north
+#    (float)    orig_grid_z : z location of grid origin (0,0,0) in km pos down
+#    (float)   d_grid_x/y/x : grid spacing along  x/y/z axis
+#    (char[])  type : (PROB_DENSITY, MISFIT)
+#LOCGRID  33 53 14  150.0 145.0 -2.0  2.0 2.0 2.0  MISFIT
+LOCGRID  51 81 29  180.0 185.0 9.0  0.5 0.5 0.5  PROB_DENSITY
+
+
+
+#
+#
+# =============================================================================
+# END of GridLoc input
+# =============================================================================
+# =============================================================================

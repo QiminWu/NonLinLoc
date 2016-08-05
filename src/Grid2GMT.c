@@ -2440,7 +2440,7 @@ int Scat2GMT(char* fnroot_in, char* orientation, int ilonglat, char* fnscat_out)
     else if (strcmp(orientation, "ZY") == 0)
         or_zy = 1;
 
-    /* read header informaion */
+    /* read header information */
     fseek(fp_scat_in, 0, SEEK_SET);
     fread(&tot_npoints, sizeof (int), 1, fp_scat_in);
 

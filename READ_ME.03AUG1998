@@ -1,0 +1,54 @@
+Significant changes since my visit to IPSN 28-31 July 1998
+
+
+*** Important changes that require modification of the control file:
+
+Vel2Grid: Control statement VGTYPE is repeatable, thus both P and S models can be generated in one run of Vel2Grid.  (see http://www-geoazur.unice.fr/~lomax/nlloc/control.html#_Vel2Grid_vgtype_)
+Example:
+# wave types
+# (VGTYPE wave_type (P, S))
+VGTYPE P
+VGTYPE S
+
+
+Grid2Time: Control statement GTFILES has a new field "waveType" to specify P or S wave types, thus the input and output file roots should not contain a final ".waveType"  (see http://www-geoazur.unice.fr/~lomax/nlloc/control.html#_Grid2Time_gtfiles_)
+Example:
+# input, output filename root
+# (GTFILES <input file root> <output file root> wave_type (P, S))
+#
+GTFILES ./model/dur_layer ./time/dur_layer  P
+
+
+NLLoc: Control statement LOCANGLES added.  Specifies whether to determine take-off angles for the maximum likelihood hypocenter and sets minimum quality cutoff for saving angles and corresponding phases to the HypoInverse Archive file. (see http://www-geoazur.unice.fr/~lomax/nlloc/control.html#_NLLoc_locangles_)
+Example:
+# take-off angles mode & minimum quality
+# (LOCANGLES angles_mode, min_quality)
+#    (char[])   angles_mode (ANGLES_YES, ANGLES_NO)
+LOCANGLES ANGLES_YES 5
+
+
+NLLoc: Control statement identifier LOCCOMP changed to LOCCMP. (see http://www-geoazur.unice.fr/~lomax/nlloc/control.html#_NLLoc_loccmp_)
+Example:
+# station/inst/comp parameters (for specifying component specific parameters, i.e. constants for magnitude calculation)
+# (LOCCMP name inst comp amp_fact sta_corr)
+#    (char[])   name  : station identifier (after alias evaluation, without trailing underscore "_")
+#    (char[])   name  : inst identifier (use '?' for don't care)
+#    (char[])   name  : comp identifier (use '?' for don't care)
+#    (float)    amp_fact: amplitude factor, will be multiplied by amplitude
+#    (float)    sta_corr: mganitude correction
+#
+# example:
+#
+#LOCCMP CDR ? ? 1.0 0.0
+#
+LOCCMP JOU ? ? 1.0 0.0
+
+
+
+*** Other changes:
+
+NLLoc: HYPO71 location output format is now much more complete. (see http://www-geoazur.unice.fr/~lomax/nlloc/format.html#_location_hypo71_)
+
+NLLoc: Integer quality removed and float time-error added in NLLoc format. (see http://www-geoazur.unice.fr/~lomax/nlloc/format.html#_phase_nlloc_ and http://www-geoazur.unice.fr/~lomax/nlloc/format.html#_location_hypphs_)
+
+Some figures and more discussion added in NLLoc inversion algorithm documentation. (see http://www-geoazur.unice.fr/~lomax/nlloc/NLLoc.html#_inversion_)

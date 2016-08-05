@@ -1,0 +1,3 @@
+NLLoc.c:
+
+#define MAX_NUM_OBS_FILES 1000

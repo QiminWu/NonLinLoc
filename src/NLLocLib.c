@@ -291,10 +291,24 @@ int Locate(int ngrid, char* fn_loc_obs, char* fn_root_out, int numArrivalsReject
         for (narr = 0; narr < NumArrivals; narr++) {
             if (Arrival[narr].n_companion < 0)
                 continue;
+            int n_companion_save = Arrival[narr].n_companion;
+            // 20160805 AJL - bug fix  narr -> NumArrivals
+            //             if (IsPhaseID(Arrival[narr].phase, "S") &&
+            //        (Arrival[narr].n_companion = IsSameArrival(Arrival, narr, narr, "P")) < 0) {
             if (IsPhaseID(Arrival[narr].phase, "S") &&
-                    (Arrival[narr].n_companion =
-                    IsSameArrival(Arrival, narr, narr, "P")) < 0) {
-                nll_puterr("ERROR: cannot find companion arrival.");
+                    (Arrival[narr].n_companion = IsSameArrival(Arrival, NumArrivals, narr, "P")) < 0) {
+            //
+                sprintf(MsgStr, "ERROR: cannot find companion arrival: %s %s n_companion %d->%d", Arrival[narr].label, Arrival[narr].phase, n_companion_save, Arrival[narr].n_companion);
+                nll_puterr(MsgStr);
+                // DEBUG
+                if (1) {
+                    sprintf(MsgStr, "Target:   narr %d %s label %s  time_grid_label %s", narr, Arrival[narr].phase, Arrival[narr].label, Arrival[narr].time_grid_label);
+                    nll_puterr(MsgStr);
+                    for (n = 0; n < NumArrivals; n++) {
+                        sprintf(MsgStr, "      narr %d %s label %s  time_grid_label %s", n, Arrival[n].phase, Arrival[n].label, Arrival[n].time_grid_label);
+                        nll_puterr(MsgStr);
+                    }
+                }
                 return (clean_memory(EXIT_ERROR_LOCATE));
             }
         }
@@ -2218,7 +2232,7 @@ int GetNextObs(FILE* fp_obs, ArrivalDesc *arrival, char* ftype_obs, int nfirst) 
     arrival->apriori_weight = 1.0;
 
     arrival->dd_event_id_1 = -1;
-    arrival->flag_ignore = 0;   // 20150521 AJL
+    arrival->flag_ignore = 0; // 20150521 AJL
 
     /* attempt to read obs based on obs file type */
 
@@ -8359,8 +8373,8 @@ void UpdateProbabilisticResiduals(int num_arrivals, ArrivalDesc *arrival, double
 /** function to calculate confidence intervals and save to file */
 /*		(MEN92, eq. 25ff) */
 
-#define N_STEPS_SRCH	101
-#define N_STEPS_CONF	11
+#define N_STEPS_SRCH 101
+#define N_STEPS_CONF 11
 
 int CalcConfidenceIntrvl(GridDesc* ptgrid, HypoDesc* phypo, char* filename) {
     FILE *fpio;
@@ -12481,7 +12495,7 @@ long double LocOctree_core(int ngrid, double xval, double yval, double zval,
     dsz = poct_node->ds.z;
     if (GeometryMode == MODE_GLOBAL) {
         //depth_corr = (ERAD - poct_node->center.z) / ERAD;   // NOTE: ERAD is max Earth radius, could use average radius AVG_ERAD, difference should be very minor
-        depth_corr = (AVG_ERAD - poct_node->center.z) / AVG_ERAD;   // 20151106 AJL - changed to AVG_ERAD, difference should be very minor
+        depth_corr = (AVG_ERAD - poct_node->center.z) / AVG_ERAD; // 20151106 AJL - changed to AVG_ERAD, difference should be very minor
         dsx_global = dsx * DEG2KM * cos(DE2RA * poct_node->center.y) * depth_corr;
         dsy_global = dsy * DEG2KM * depth_corr;
         volume = dsx_global * dsy_global * dsz;

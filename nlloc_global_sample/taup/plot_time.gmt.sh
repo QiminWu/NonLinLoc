@@ -1,6 +1,6 @@
 #  --- GMT defaults
-gmtset  PAPER_MEDIA A4   PAGE_ORIENTATION landscape   MEASURE_UNIT cm    ANOT_FONT_SIZE 10p    HEADER_FONT_SIZE 18p    LABEL_FONT_SIZE 12p    DEGREE_FORMAT 5
-
+gmtset  PS_MEDIA A4   PS_PAGE_ORIENTATION landscape   PROJ_LENGTH_UNIT cm    FONT_TITLE 18p    FONT_LABEL 12p  
+#gmtset ANOT_FONT_SIZE 10p    
 
 #########
 PHASE=P
@@ -22,10 +22,11 @@ makecpt -T0/2500/50 > ${CPTFILE}
 
 STEP_SIZE=0.1/2.5
 RVAL=-R0/180/5678/6378
-xyz2grd  ${DATAFILE} -G${DATAFILE}.grd -I${STEP_SIZE} -ZfLTw ${RVAL}
+#xyz2grd  ${DATAFILE} -G${DATAFILE}.grd -I${STEP_SIZE} -ZfLTw ${RVAL}
+xyz2grd -V  ${DATAFILE} -G${DATAFILE}.grd -I${STEP_SIZE} -ZTLfw ${RVAL}
 
 JVAL=-Jpa0.002/90
-grdimage  ${DATAFILE}.grd -C${CPTFILE} ${RVAL} ${JVAL}  -K -X2 -Y5 > ${PSFILE}
+grdimage -V ${DATAFILE}.grd -C${CPTFILE} ${RVAL} ${JVAL}  -K -X2 -Y5 > ${PSFILE}
 grdcontour  ${DATAFILE}.grd -C${CPTFILE} ${RVAL} ${JVAL}   -A- -O -K >> ${PSFILE}
 psbasemap  ${RVAL} ${JVAL}  -Ba10:Distance:/a200:Depth::.${DATAFILE0}:WESN -O -K >> ${PSFILE}
 

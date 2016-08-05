@@ -412,6 +412,9 @@ int SumLocations(int argc, char** argv) {
                     fprintf(fp_hyp_scat_out, "%9.4lf %9.4lf %9.4lf %9.2le\n",
                             fdata[0], fdata[1], fdata[2], fdata[3]);
 
+                    // DEBUG check of scatter data
+                    //printf("x %f  y %f  z %f  value %le\n", fdata[0], fdata[1], fdata[2], fdata[3]);
+
                 }
 
                 num_points_tot += npoints;

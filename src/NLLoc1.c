@@ -270,9 +270,10 @@ int NLLoc
             strcpy(fname, fn_control);
         sprintf(sys_command, "cp -p %s %s_%s", fn_control, fn_path_output, fname);
         system(sys_command);
+        printf("sys_command: %s\n", sys_command);
         sprintf(sys_command, "cp -p %s %slast.in", fn_control, f_outpath);
         system(sys_command);
-        //printf("sys_command: %s\n", sys_command);
+        printf("sys_command: %s\n", sys_command);
     }
 
 

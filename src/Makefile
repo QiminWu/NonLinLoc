@@ -69,10 +69,10 @@ TIME3D_CCFLAGS=
 GRID_LIB_OBJS=GridLib.o util.o geo.o octtree/octtree.o alomax_matrix/alomax_matrix.o alomax_matrix/alomax_matrix_svd.o matrix_statistics/matrix_statistics.o vector/vector.o ran1/ran1.o map_project.o
 NLLOC_LIB_OBJS=calc_crust_corr.o velmod.o GridMemLib.o phaselist.o loclist.o otime_limit.o
 
-DISTRIB_SOURCES=NLLoc_ Vel2Grid_ Grid2Time_ Time2Angles_ Grid2GMT_ LocSum_ scat2latlon_ Time2EQ_ PhsAssoc_ hypoe2hyp_ fpfit2hyp_ oct2grid_ Vel2Grid3D_ interface2fmm_ fmm2grid_
+DISTRIB_SOURCES=NLLoc_ Vel2Grid_ Grid2Time_ Time2Angles_ Grid2GMT_ LocSum_ scat2latlon_ Time2EQ_ PhsAssoc_ hypoe2hyp_ fpfit2hyp_ oct2grid_ Vel2Grid3D_ interface2fmm_ fmm2grid_ NLDiffLoc_ Loc2ddct_
 all : ${DISTRIB_SOURCES}
 distrib : ${DISTRIB_SOURCES}
-dev : ${DISTRIB_SOURCES} NLDiffLoc_
+dev : ${DISTRIB_SOURCES}
 
 
 # --------------------------------------------------------------------------
@@ -120,6 +120,19 @@ ${BINDIR}/NLDiffLoc : NLDiffLoc.o ${OBJS100}
 	${CC} NLDiffLoc.o ${OBJS100} ${CCFLAGS} -o ${BINDIR}/NLDiffLoc -lm
 NLDiffLoc.o : NLDiffLoc.c NLLocLib.h GridLib.h GridMemLib.h alomax_matrix/alomax_matrix.h alomax_matrix/alomax_matrix_svd.h matrix_statistics/matrix_statistics.h
 	${CC} -c ${CCFLAGS}  NLDiffLoc.c  $(OPTIONS)
+# --------------------------------------------------------------------------
+
+
+
+# --------------------------------------------------------------------------
+# Loc2ddct
+#
+OBJS101 = Loc2ddct.o $(GRID_LIB_OBJS)
+Loc2ddct_ : $(BINDIR)/Loc2ddct
+$(BINDIR)/Loc2ddct : $(OBJS101)
+	${CC} $(OBJS101) $(CCFLAGS) -o $(BINDIR)/Loc2ddct -lm
+Loc2ddct.o : Loc2ddct.c GridLib.h
+	${CC} $(CCFLAGS) -c Loc2ddct.c
 # --------------------------------------------------------------------------
 
 

@@ -35,8 +35,8 @@ tel: +33(0)493752502  e-mail: anthony@alomax.net  web: http://www.alomax.net
 
 
 #define PACKAGE  "NonLinLoc"
-#define PVER  "6.04.02"
-#define PDATE "06Nov2015"
+#define PVER  "6.04.03"
+#define PDATE "25Jul2016"
 /*#define PCOPYRIGHT "\nCopyright (C) 1999-2010 Anthony Lomax\n"*/
 #define PCOPYRIGHT "\0"
 
@@ -634,7 +634,8 @@ EXTERN_TXT HypoDesc Hypocenter;
 #define MAP_TRANS_GLOBAL 	1
 #define MAP_TRANS_SIMPLE 	2
 #define MAP_TRANS_LAMBERT 	3
-#define MAP_TRANS_SDC 		4
+#define MAP_TRANS_TM    	4
+#define MAP_TRANS_SDC 		5
 EXTERN_TXT char map_trans_type[NUM_PROJ_MAX][MAXLINE]; /* name of projection */
 EXTERN_TXT int map_itype[NUM_PROJ_MAX]; /* int id of projection */
 EXTERN_TXT char MapProjStr[NUM_PROJ_MAX][2 * MAXLINE]; /* string description of proj params */

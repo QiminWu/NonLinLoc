@@ -1,0 +1,38 @@
+BINDIR=${MYBIN}
+INCLUDE_DIR=../
+
+# Linux, Mac OS X ?
+CCFLAGS_BASIC =  -Wall  ${GRID_FLOAT}
+# Mac OS X ?
+#CCFLAGS_BASIC =  -Wall -D__APPLE__
+# 
+# optimized
+export CCFLAGS = -O3 $(CCFLAGS_BASIC)
+# 
+# profile
+#export CCFLAGS= -pg $(CCFLAGS_BASIC)
+# 
+# debug - gdb, valgrind, ...
+#export CCFLAGS = $(CCFLAGS_BASIC) -g
+# valgrind --leak-check=yes  exe_name <args>
+# valgrind --leak-check=full --show-reachable=yes exe_name <args>
+
+
+# --------------------------------------------------------------------------
+# Vel2Grid3D
+# 
+#OBJS13 = ${INCLUDE_DIR}GridLib.o ${INCLUDE_DIR}util.o ${INCLUDE_DIR}nrutil.o ${INCLUDE_DIR}nrmatrix.o ${INCLUDE_DIR}velmod.o ${INCLUDE_DIR}map_project.o ${INCLUDE_DIR}geo.o ${INCLUDE_DIR}octtree.o ${INCLUDE_DIR}ran1.o
+OBJS13 = ${INCLUDE_DIR}/GridLib.o ${INCLUDE_DIR}/util.o ${INCLUDE_DIR}/velmod.o ${INCLUDE_DIR}/map_project.o ${INCLUDE_DIR}/geo.o  ${INCLUDE_DIR}/vector/vector.o ${INCLUDE_DIR}/octtree/octtree.o ${INCLUDE_DIR}/ran1/ran1.o ${INCLUDE_DIR}/matrix_statistics/matrix_statistics.o ${INCLUDE_DIR}/alomax_matrix/alomax_matrix.o ${INCLUDE_DIR}/alomax_matrix/alomax_matrix_svd.o
+
+all : Vel2Grid3D_
+
+#PVER = 1
+Vel2Grid3D_ : $(BINDIR)/Vel2Grid3D
+$(BINDIR)/Vel2Grid3D : Vel2Grid3D.o $(OBJS13)
+	gcc Vel2Grid3D.o  $(OBJS13) $(CCFLAGS) -o $(BINDIR)/Vel2Grid3D -lm -I${INCLUDE_DIR}
+Vel2Grid3D.o : Vel2Grid3D.c ${INCLUDE_DIR}/GridLib.h
+	gcc $(CCFLAGS) -c Vel2Grid3D.c -I${INCLUDE_DIR}
+velmod.o : ${INCLUDE_DIR}/velmod.c
+	gcc -c $(CCFLAGS) ${INCLUDE_DIR}/velmod.c -I${INCLUDE_DIR}
+# --------------------------------------------------------------------------
+
